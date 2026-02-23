@@ -17,4 +17,11 @@ class DebtViewModel(private val dao: DebtDao) : ViewModel() {
             dao.upsertDebt(newEntry)
         }
     }
+
+    fun deleteDebt(debt: DebtEntry) {
+        viewModelScope.launch {
+            dao.deleteDebt(debt)
+        }
+    }
+
 }
