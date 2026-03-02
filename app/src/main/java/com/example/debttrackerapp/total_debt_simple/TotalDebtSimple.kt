@@ -30,10 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TotalDebt(viewModel: DebtViewModel) {
+fun TotalDebt(
+    navController: NavController,
+    viewModel: DebtViewModel) {
 
     val debtList by viewModel.debts.collectAsState(initial = emptyList())
 
@@ -121,6 +124,14 @@ fun TotalDebt(viewModel: DebtViewModel) {
             }
         ) {
             Text("Clear")
+        }
+
+        Button(
+            onClick = {
+                navController.navigate(Routes.Home)
+            }
+        ) {
+            Text("Back")
         }
 
         Text(text = "Recent Calculations", style = MaterialTheme.typography.titleLarge)

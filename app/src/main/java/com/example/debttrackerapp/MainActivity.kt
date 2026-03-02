@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.room.Room
+import com.example.debttrackerapp.total_debt_simple.App
 import com.example.debttrackerapp.total_debt_simple.DebtDatabase
 import com.example.debttrackerapp.total_debt_simple.DebtViewModel
 import com.example.debttrackerapp.total_debt_simple.TotalDebt
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DebtTrackerAppTheme {
-                TotalDebt(viewModel = viewModel)
+                App(viewModel = viewModel)
             }
         }
     }
