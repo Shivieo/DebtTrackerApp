@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             DebtTrackerAppTheme {
                 TotalDebt(viewModel = viewModel)
-                }
             }
         }
     }
+}

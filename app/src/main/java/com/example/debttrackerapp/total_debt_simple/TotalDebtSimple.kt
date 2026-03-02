@@ -130,7 +130,7 @@ fun TotalDebt(viewModel: DebtViewModel) {
         ) {
             items(debtList) { debt ->
                 Card(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 4.dp)
                 ) {
                     Row(
                         modifier = Modifier.padding(16.dp).fillMaxWidth(),
