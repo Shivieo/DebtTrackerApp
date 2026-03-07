@@ -33,6 +33,8 @@ fun AdvanceDebtTracker(navController: NavController) {
 
     // States for dropdowns
     var expanded by remember { mutableStateOf(false) }
+    var expandedSec by remember { mutableStateOf(false) }
+    var expandedThi by remember { mutableStateOf(false) }
     val optionsInc = listOf("Credit Purchase", "Assets purchase on credit", "Outstanding Salary", "Outstanding Rent", "Miscellaneous outstandings")
     val optionsDec = listOf("Sales", "Miscellaneous sales")
     val optionsExp = listOf("Rent", "Electricity", "Water", "Miscellaneous expenses")
@@ -41,6 +43,10 @@ fun AdvanceDebtTracker(navController: NavController) {
     var selectedOptionsExp by remember { mutableStateOf(optionsExp[0]) }
 
     var amountInput by remember { mutableStateOf("") }
+    var amountInput2 by remember { mutableStateOf("") }
+    var amountInput3 by remember { mutableStateOf("") }
+    var condition by remember { mutableStateOf("") }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -97,30 +103,30 @@ fun AdvanceDebtTracker(navController: NavController) {
 
         // second
         ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
+            expanded = expandedSec,
+            onExpandedChange = { expandedSec = !expandedSec }
         ) {
             OutlinedTextField(
                 value = selectedOptionDec,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text("Category") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedSec) },
                 modifier = Modifier
                     .menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true)
                     .fillMaxWidth()
             )
 
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+                expanded = expandedSec,
+                onDismissRequest = { expandedSec = false }
             ) {
-                optionsInc.forEach { optionsDec ->
+                optionsDec.forEach { optionsDec ->
                     DropdownMenuItem(
                         text = { Text(optionsDec) },
                         onClick = {
                             selectedOptionInc = optionsDec
-                            expanded = false
+                            expandedSec = false
                         }
                     )
                 }
@@ -130,8 +136,8 @@ fun AdvanceDebtTracker(navController: NavController) {
         Spacer(Modifier.height(10.dp))
 
         OutlinedTextField(
-            value = amountInput,
-            onValueChange = { amountInput = it },
+            value = amountInput2,
+            onValueChange = { amountInput2 = it },
             label = { Text("Enter Amount") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
@@ -141,30 +147,30 @@ fun AdvanceDebtTracker(navController: NavController) {
 
         // third
         ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
+            expanded = expandedThi,
+            onExpandedChange = { expandedThi = !expandedThi }
         ) {
             OutlinedTextField(
                 value = selectedOptionsExp,
                 onValueChange = {},
                 readOnly = true,
                 label = { Text("Category") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedThi) },
                 modifier = Modifier
                     .menuAnchor(type = MenuAnchorType.PrimaryNotEditable, enabled = true)
                     .fillMaxWidth()
             )
 
             ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
+                expanded = expandedThi,
+                onDismissRequest = { expandedThi = false }
             ) {
-                optionsInc.forEach { optionsExp ->
+                optionsExp.forEach { optionsExp ->
                     DropdownMenuItem(
                         text = { Text(optionsExp) },
                         onClick = {
                             selectedOptionsExp = optionsExp
-                            expanded = false
+                            expandedThi = false
                         }
                     )
                 }
@@ -174,14 +180,43 @@ fun AdvanceDebtTracker(navController: NavController) {
         Spacer(Modifier.height(10.dp))
 
         OutlinedTextField(
-            value = amountInput,
-            onValueChange = { amountInput = it },
+            value = amountInput3,
+            onValueChange = { amountInput3 = it },
             label = { Text("Enter Amount") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(Modifier.height(10.dp))
+
+        Button(
+            onClick = {
+                val amount = amountInput.toIntOrNull() ?: 0
+                val amount2 = amountInput2.toIntOrNull() ?: 0
+                val amount3 = amountInput3.toIntOrNull() ?: 0
+                val total = amount - (amount2 - amount3)
+                val newCondition = total.toString()
+                if (total < amount) {
+                    amountInput = newCondition // Update amountInput if debt decreased
+                } else if(total < 0) {
+                    amountInput = (total * -1).toString() // Update amountInput if debt increased
+                }
+                condition = newCondition
+            }
+        ) {
+            Text("Debt Condition")
+        }
+
+        Text(
+            text = when {
+                condition.isEmpty() -> ""
+                condition.toInt() < 0 -> "Pay Attention!!!, Your debt is increased and becomes ${condition.toInt() + amountInput.toInt()}"
+                condition.toInt() < (amountInput.toIntOrNull() ?: 0) -> "Your debt is decreasing and become $condition"
+                else -> "Your debt remains as it is $condition"
+            }
+        )
+
+        // make clear button here
 
         Button(
             onClick = {
