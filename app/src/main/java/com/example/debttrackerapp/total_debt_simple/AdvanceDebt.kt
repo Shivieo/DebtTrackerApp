@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,11 +47,12 @@ fun AdvanceDebtTracker(navController: NavController) {
     var amountInput by remember { mutableStateOf("") }
     var amountInput2 by remember { mutableStateOf("") }
     var amountInput3 by remember { mutableStateOf("") }
-    var condition by remember { mutableStateOf("") }
+    var statusMessage by remember { mutableStateOf("") }
 
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -191,32 +194,38 @@ fun AdvanceDebtTracker(navController: NavController) {
 
         Button(
             onClick = {
-                val amount = amountInput.toIntOrNull() ?: 0
-                val amount2 = amountInput2.toIntOrNull() ?: 0
-                val amount3 = amountInput3.toIntOrNull() ?: 0
-                val total = amount - (amount2 - amount3)
-                val newCondition = total.toString()
-                if (total < amount) {
-                    amountInput = newCondition // Update amountInput if debt decreased
-                } else if(total < 0) {
-                    amountInput = (total * -1).toString() // Update amountInput if debt increased
+                val currentDebt = amountInput.toIntOrNull() ?: 0
+                val amountDec = amountInput2.toIntOrNull() ?: 0
+                val amountExp = amountInput3.toIntOrNull() ?: 0
+                val total = currentDebt - (amountDec - amountExp)
+
+                statusMessage = when {
+                    total > currentDebt -> "Pay Attention!!!, Your debt is increased and becomes $total"
+                    total < currentDebt -> "Your debt is decreasing and become $total"
+                    else -> "Your debt remains as it is $total"
                 }
-                condition = newCondition
+
+                amountInput = total.toString()
             }
         ) {
             Text("Debt Condition")
         }
 
-        Text(
-            text = when {
-                condition.isEmpty() -> ""
-                condition.toInt() < 0 -> "Pay Attention!!!, Your debt is increased and becomes ${condition.toInt() + amountInput.toInt()}"
-                condition.toInt() < (amountInput.toIntOrNull() ?: 0) -> "Your debt is decreasing and become $condition"
-                else -> "Your debt remains as it is $condition"
-            }
-        )
+        if (statusMessage.isNotEmpty()) {
+            Text(text = statusMessage)
+        }
 
         // make clear button here
+        Button(
+            onClick = {
+                amountInput = ""
+                amountInput2 = ""
+                amountInput3 = ""
+                statusMessage = ""
+            }
+        ) {
+            Text("Clear")
+        }
 
         Button(
             onClick = {
