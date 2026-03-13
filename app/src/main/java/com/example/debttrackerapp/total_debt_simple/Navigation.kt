@@ -21,7 +21,7 @@ fun App(viewModel: DebtViewModel) {
             }
 
             composable<Routes.AdvanceDebt> {
-                AdvanceDebtTracker(navController = navController)
+                AdvanceDebtTracker(navController = navController, viewModel = viewModel)
             }
         }
     }

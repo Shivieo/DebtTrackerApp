@@ -36,7 +36,8 @@ import androidx.navigation.NavController
 @Composable
 fun TotalDebt(
     navController: NavController,
-    viewModel: DebtViewModel) {
+    viewModel: DebtViewModel
+) {
 
     val debtList by viewModel.debts.collectAsState(initial = emptyList())
 
@@ -63,11 +64,11 @@ fun TotalDebt(
         verticalArrangement = Arrangement.Center
     ) {
 
-        debtToDelete?.let { debt->
+        debtToDelete?.let { debt ->
             AlertDialog(
                 onDismissRequest = { debtToDelete = null }, // Hide if they click outside
                 title = { Text("Confirm Delete") },
-                text = { Text("Are you sure you want to delete '${debt.title}'?") },
+                text = { Text("Are you sure you want to delete '${debt.basicTitle}'?") },
                 confirmButton = {
                     TextButton(
                         onClick = {
@@ -137,20 +138,25 @@ fun TotalDebt(
         Text(text = "Recent Calculations", style = MaterialTheme.typography.titleLarge)
 
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             items(debtList) { debt ->
                 Card(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 4.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp, horizontal = 4.dp)
                 ) {
                     Row(
-                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column() {
-                            Text(text = debt.title)
-                            Text(text = "₹${debt.amount}", fontWeight = FontWeight.Bold)
+                            Text(text = debt.basicTitle)
+                            Text(text = "₹${debt.basicAmount}", fontWeight = FontWeight.Bold)
                         }
                         IconButton(
                             onClick = { debtToDelete = debt }

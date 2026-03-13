@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class DebtViewModel(private val dao: DebtDao) : ViewModel() {
+class DebtViewModel(private val dao: DebtDao, private val AdvDebtDao: AdvanceDebtDao) : ViewModel() {
     // This "Flow" automatically updates the UI whenever the DB changes
     val debts = dao.getAllDebts()
 
     fun addDebt(title: String, amount: String) {
         val amountInt = amount.toIntOrNull() ?: 0
-        val newEntry = DebtEntry(title = title, amount = amountInt)
+        val newEntry = DebtEntry(basicTitle = title,basicAmount = amountInt)
 
         // Database operations MUST happen in a Coroutine (background thread)
         viewModelScope.launch {
@@ -21,6 +21,23 @@ class DebtViewModel(private val dao: DebtDao) : ViewModel() {
     fun deleteDebt(debt: DebtEntry) {
         viewModelScope.launch {
             dao.deleteDebt(debt)
+        }
+    }
+
+    val advDebts = AdvDebtDao.getAllAdvanceDebts()
+
+    fun addAdvanceDebt(title: String, amount: String) {
+        val amountInt = amount.toIntOrNull() ?: 0
+        val newEntry = AdvanceDebtEntry(title = title, amount = amountInt)
+
+        viewModelScope.launch {
+            AdvDebtDao.upsertAdvanceDebt(newEntry)
+        }
+    }
+
+    fun deleteAdvDebt(debt: AdvanceDebtEntry) {
+        viewModelScope.launch {
+            AdvDebtDao.deleteAdvanceDebt(debt)
         }
     }
 

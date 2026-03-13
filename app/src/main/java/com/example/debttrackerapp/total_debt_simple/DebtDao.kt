@@ -14,6 +14,18 @@ interface DebtDao {
     @Delete
     suspend fun deleteDebt(debt: DebtEntry)
 
-    @Query("SELECT * FROM debts ORDER BY id DESC")
+    @Query("SELECT * FROM debts ORDER BY basicId DESC")
     fun getAllDebts(): Flow<List<DebtEntry>>
+}
+
+@Dao
+interface AdvanceDebtDao {
+    @Upsert // This handles both insert and update!
+    suspend fun upsertAdvanceDebt(debt: AdvanceDebtEntry)
+
+    @Delete
+    suspend fun deleteAdvanceDebt(debt: AdvanceDebtEntry)
+
+    @Query("SELECT * FROM advanceDebts ORDER BY id DESC")
+    fun getAllAdvanceDebts(): Flow<List<AdvanceDebtEntry>>
 }
