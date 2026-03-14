@@ -49,6 +49,9 @@ fun AdvanceDebtTracker(
 
     val debtList by viewModel.advDebts.collectAsState(initial = emptyList())
 
+    // Get the amount from the most recent entry, or 0 if the list is empty
+    val recentBusinessDebt = debtList.firstOrNull()?.amount ?: 0
+
     // States for dropdowns
     var expanded by remember { mutableStateOf(false) }
     var expandedSec by remember { mutableStateOf(false) }
@@ -109,6 +112,24 @@ fun AdvanceDebtTracker(
 
         item {
             Text("Advanced Debt Entry", style = MaterialTheme.typography.headlineMedium)
+        }
+
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = androidx.compose.material3.CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
+                )
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(text = "Last Recorded Debt", style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = "₹$recentBusinessDebt",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
 
         item {
@@ -245,19 +266,22 @@ fun AdvanceDebtTracker(
         item {
             Button(
                 onClick = {
-                    val currentDebt = amountInput.toIntOrNull() ?: 0
-                    val amountDec = amountInput2.toIntOrNull() ?: 0
-                    val amountExp = amountInput3.toIntOrNull() ?: 0
-                    val total = currentDebt - (amountDec - amountExp)
+                    val currentDebt = amountInput.toLongOrNull() ?: 0
+                    val amountDec = amountInput2.toLongOrNull() ?: 0
+                    val amountExp = amountInput3.toLongOrNull() ?: 0
+                    val total = recentBusinessDebt + currentDebt - (amountDec - amountExp)
 
                     statusMessage = when {
-                        total > currentDebt -> "Pay Attention!!!, Your debt is increased and becomes $total"
-                        total < currentDebt -> "Your debt is decreasing and become $total"
+                        total > recentBusinessDebt -> "Pay Attention!!!, Your debt is increased and becomes $total"
+                        total < recentBusinessDebt -> "Your debt is decreasing and become $total"
                         else -> "Your debt remains as it is $total"
                     }
 
                     amountInput = total.toString()
-                    viewModel.addAdvanceDebt("Total Debt on Business", total.toString())
+                    viewModel.addAdvanceDebt("Updated Business Debt", total.toString())
+                    amountInput = ""
+                    amountInput2 = ""
+                    amountInput3 = ""
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
