@@ -2,9 +2,12 @@ package com.example.debttrackerapp.total_debt_simple
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DebtViewModel(private val dao: DebtDao, private val AdvDebtDao: AdvanceDebtDao) : ViewModel() {
+@HiltViewModel
+class DebtViewModel @Inject constructor(private val dao: DebtDao, private val AdvDebtDao: AdvanceDebtDao) : ViewModel() {
     // This "Flow" automatically updates the UI whenever the DB changes
     val debts = dao.getAllDebts()
 

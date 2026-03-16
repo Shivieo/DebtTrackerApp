@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.com.google.devtools.ksp)
 
+    id("com.google.dagger.hilt.android")
+
     kotlin("plugin.serialization") version "2.0.0"
 }
 
@@ -77,4 +79,9 @@ dependencies {
 
     // custom buttom nav bar
     implementation("com.canopas.compose-animated-navigationbar:bottombar:1.0.1")
+
+    implementation("com.google.dagger:hilt-android:2.57.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.57.1")
+
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 }

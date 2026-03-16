@@ -200,7 +200,7 @@ fun AdvanceDebtTracker(
                         DropdownMenuItem(
                             text = { Text(optionsDec) },
                             onClick = {
-                                selectedOptionInc = optionsDec
+                                selectedOptionDec = optionsDec
                                 expandedSec = false
                             }
                         )
