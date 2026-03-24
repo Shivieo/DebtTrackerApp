@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -66,7 +67,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // For constrain layout
+    // For constraint layout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.1")
     implementation("androidx.compose.material:material-icons-core:1.6.6")
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
@@ -84,4 +85,8 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:2.57.1")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    // Networking
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }

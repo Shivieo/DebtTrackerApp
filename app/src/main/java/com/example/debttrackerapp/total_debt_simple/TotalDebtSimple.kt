@@ -140,6 +140,7 @@ fun TotalDebt(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
+                .weight(1f)
         ) {
             items(debtList) { debt ->
                 Card(

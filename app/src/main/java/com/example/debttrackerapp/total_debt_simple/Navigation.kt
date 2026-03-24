@@ -13,8 +13,8 @@ fun App() {
 
     NavHost(navController = navController, startDestination = Navigation.Main) {
         navigation<Navigation.Main>(startDestination = Routes.Home) {
-            composable<Routes.Home> {
-                HomeScreenDebt(navController = navController)
+            composable<Routes.Home> { val viewModel: DebtViewModel = hiltViewModel()
+                HomeScreenDebt(navController = navController, viewModel = viewModel)
             }
 
             composable<Routes.BasicDebt> {
